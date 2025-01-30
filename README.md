@@ -11,7 +11,7 @@ bun install
 
 2. Configure your environment variables:
    - Get your Telegram Bot Token from [@BotFather](https://t.me/botfather)
-   - Get your Telegram Chat ID (you can use [@userinfobot](https://t.me/userinfobot))
+   - Get your Telegram Chat ID (you can use [@getidsbot](https://t.me/getidsbot))
    - Add these values to your wrangler.toml or set them using:
 ```bash
 wrangler secret put TELEGRAM_BOT_TOKEN
