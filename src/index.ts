@@ -3,11 +3,6 @@ interface Env {
   TELEGRAM_CHAT_ID: string;
 }
 
-interface TradingViewAlert {
-  message: string;
-  [key: string]: any;
-}
-
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     // Only allow POST requests
@@ -16,15 +11,15 @@ export default {
     }
 
     try {
-      // Parse the TradingView webhook payload
-      const payload: TradingViewAlert = await request.json();
+      // Get the raw text from the request body
+      const message = await request.text();
 
-      if (!payload.message) {
-        return new Response('Missing message in payload', { status: 400 });
+      if (!message) {
+        return new Response('Missing message in request body', { status: 400 });
       }
 
       // Format the message for Telegram
-      const telegramMessage = encodeURIComponent(payload.message);
+      const telegramMessage = encodeURIComponent(message);
       
       // Send to Telegram
       const telegramUrl = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${env.TELEGRAM_CHAT_ID}&text=${telegramMessage}`;

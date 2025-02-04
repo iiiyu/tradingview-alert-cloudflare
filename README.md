@@ -2,6 +2,8 @@
 
 This project is a Cloudflare Worker that receives webhooks from TradingView and forwards them to Telegram.
 
+![TradingView Alert Setup](docs/alert.png)
+
 ## Setup Instructions
 
 1. Install dependencies:
@@ -27,7 +29,9 @@ bun run deploy
    - In TradingView, create a new alert
    - Set the "Webhook URL" to your Cloudflare Worker URL
    - Format your alert message in the "Message" field
-   - The webhook should send a POST request with a JSON payload containing a "message" field
+   - The alert will be sent as plain text to your Telegram chat
+
+
 
 ## Development
 
@@ -40,7 +44,5 @@ bun run dev
 
 You can test the webhook using curl:
 ```bash
-curl -X POST https://your-worker-url.workers.dev \
-  -H "Content-Type: application/json" \
-  -d '{"message":"Test alert from TradingView"}'
+curl -H 'Content-Type: text/plain; charset=utf-8' -d 'BTCUSD Greater Than 9000' -X POST https://your-worker-url.workers.dev
 ```
