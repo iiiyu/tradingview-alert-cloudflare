@@ -3,6 +3,11 @@ interface Env {
   TELEGRAM_CHAT_ID: string;
 }
 
+interface JsonAlert {
+  text: string;
+  [key: string]: any;
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     // Only allow POST requests
@@ -11,11 +16,22 @@ export default {
     }
 
     try {
-      // Get the raw text from the request body
-      const message = await request.text();
+      let message: string;
+      const contentType = request.headers.get('content-type')?.toLowerCase() || '';
 
-      if (!message) {
-        return new Response('Missing message in request body', { status: 400 });
+      // Handle different content types
+      if (contentType.includes('application/json')) {
+        const jsonData: JsonAlert = await request.json();
+        if (!jsonData.text) {
+          return new Response('Missing text field in JSON payload', { status: 400 });
+        }
+        message = jsonData.text;
+      } else {
+        // Treat as plain text
+        message = await request.text();
+        if (!message) {
+          return new Response('Missing message in request body', { status: 400 });
+        }
       }
 
       // Format the message for Telegram

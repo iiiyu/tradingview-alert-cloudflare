@@ -32,7 +32,6 @@ bun run deploy
    - The alert will be sent as plain text to your Telegram chat
 
 
-
 ## Development
 
 To run locally:
@@ -42,7 +41,14 @@ bun run dev
 
 ## Testing
 
-You can test the webhook using curl:
+You can test the webhook using curl in two ways:
+
+1. Using plain text (recommended for TradingView):
 ```bash
 curl -H 'Content-Type: text/plain; charset=utf-8' -d 'BTCUSD Greater Than 9000' -X POST https://your-worker-url.workers.dev
+```
+
+2. Using JSON format:
+```bash
+curl -H 'Content-Type: application/json; charset=utf-8' -d '{"text": "BTCUSD Greater Than 9000"}' -X POST https://your-worker-url.workers.dev
 ```
